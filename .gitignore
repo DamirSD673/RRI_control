@@ -1,0 +1,18 @@
+# Always ignore journal and log files
+*.bak
+*.zip
+*.log
+*.jou
+*.str
+*.pdf
+*.xls
+
+# Ignore trash in bd directory except .BD files
+
+# Ignore editor's temporary files
+*~
+*#
+
+# Ignore Vivado sandbox
+/edit_rri_control_v1_0/*
+/.Xil/*
