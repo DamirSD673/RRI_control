@@ -172,6 +172,8 @@ architecture Behavioral of tb_rri_control is
     -- AXI LITE testbench control
     signal sendIt : std_logic := '0';
     signal readIt : std_logic := '0';
+    signal timeIt : std_logic := '0';
+    signal flag_write : std_logic := '0';
     
     -- ADC Signal Generator
     signal adc_value : unsigned(13 downto 0) := (others => '0');
@@ -331,7 +333,7 @@ begin
         s_s_axi_lite_wstrb<=b"0000";
             
         s_s_axi_lite_awaddr<=x"1" & b"00"; -- write to register 0x01 (ADC Number of Samples)
-        s_s_axi_lite_wdata<=x"000001FE"; -- value 
+        s_s_axi_lite_wdata<=x"000005E8"; -- value 
         s_s_axi_lite_wstrb<=b"1111";
         sendIt<='1';                --Start AXI Write to Slave
         wait for 1 ns; sendIt<='0'; --Clear Start Send Flag
@@ -382,6 +384,7 @@ begin
     wait until s_s_axi_lite_rvalid = '1';
     wait until s_s_axi_lite_rvalid = '0';
         
+        wait for 5 us;
         s_s_axi_lite_awaddr<= x"3" & b"00"; -- write to register 0x03
         s_s_axi_lite_wdata<=x"00000001"; -- value 1024 (0x400)
         s_s_axi_lite_wstrb<=b"1111";
@@ -390,8 +393,21 @@ begin
         --s_s_axi_lite_tready <= '1';
     wait until s_s_axi_lite_bvalid = '1';
     wait until s_s_axi_lite_bvalid = '0';  --AXI Write finished
-        s_s_axi_lite_wstrb<=b"0000";
+        s_s_axi_lite_wstrb<=b"0000"; -- END 
+    
+    wait for 10 us;
+    timeIt <= '1';
+    wait for 1 ns; timeIt <= '0';
+    s_s_axi_lite_awaddr<=x"1" & b"00"; -- write to register 0x04 (DAC Table Data)
+    s_s_axi_lite_wdata<=x"0000036D"; -- value 
+    s_s_axi_lite_wstrb<=b"1111";
+    sendIt<='1';                --Start AXI Write to Slave
+    wait for 1 ns; sendIt<='0'; --Clear Start Send Flag
         
+    wait until s_s_axi_lite_bvalid = '1';
+    wait until s_s_axi_lite_bvalid = '0';  --AXI Write finished
+        s_s_axi_lite_wstrb<=b"0000";
+    
     wait for g_timeout;
 		assert false report "timeout reached" severity failure;
 		stop(1);

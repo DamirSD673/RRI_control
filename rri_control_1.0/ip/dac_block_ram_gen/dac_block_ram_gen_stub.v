@@ -1,10 +1,10 @@
 // Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2019.2 (lin64) Build 2708876 Wed Nov  6 21:39:14 MST 2019
-// Date        : Fri Dec  2 11:16:50 2022
+// Date        : Mon Dec  5 15:16:13 2022
 // Host        : damir-VivoBook-ASUSLaptop-X512DK-X512DK running 64-bit Ubuntu 22.04.1 LTS
 // Command     : write_verilog -force -mode synth_stub
-//               /home/damir/Downloads/RRI_Control/rri_control_1.0/ip/dac_block_ram_gen/dac_block_ram_gen_stub.v
+//               /home/damir/Downloads/RRI_control/rri_control_1.0/ip/dac_block_ram_gen/dac_block_ram_gen_stub.v
 // Design      : dac_block_ram_gen
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7z010clg400-1

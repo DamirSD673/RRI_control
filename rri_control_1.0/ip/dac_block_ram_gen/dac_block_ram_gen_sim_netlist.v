@@ -1,10 +1,10 @@
 // Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2019.2 (lin64) Build 2708876 Wed Nov  6 21:39:14 MST 2019
-// Date        : Fri Dec  2 11:16:50 2022
+// Date        : Mon Dec  5 15:16:13 2022
 // Host        : damir-VivoBook-ASUSLaptop-X512DK-X512DK running 64-bit Ubuntu 22.04.1 LTS
 // Command     : write_verilog -force -mode funcsim
-//               /home/damir/Downloads/RRI_Control/rri_control_1.0/ip/dac_block_ram_gen/dac_block_ram_gen_sim_netlist.v
+//               /home/damir/Downloads/RRI_control/rri_control_1.0/ip/dac_block_ram_gen/dac_block_ram_gen_sim_netlist.v
 // Design      : dac_block_ram_gen
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
