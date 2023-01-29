@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="21000001fs"></ZoomEndTime>
-      <Cursor1Time time="21000000fs"></Cursor1Time>
+      <ZoomEndTime time="11252443fs"></ZoomEndTime>
+      <Cursor1Time time="2568000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="272"></NameColumnWidth>
-      <ValueColumnWidth column_width="73"></ValueColumnWidth>
+      <ValueColumnWidth column_width="69"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="57" />
+   <WVObjectSize size="58" />
    <wvobject type="logic" fp_name="/tb_rri_control/s_clk_axi">
       <obj_property name="ElementShortName">s_clk_axi</obj_property>
       <obj_property name="ObjectShortName">s_clk_axi</obj_property>
@@ -193,6 +193,11 @@
       <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       <obj_property name="CellHeight">100</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_rri_control/dut/rri_counter_inst/adc_channel_active">
+      <obj_property name="ElementShortName">adc_channel_active[1:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_channel_active[1:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb_rri_control/dut/rri_control_v1_0_S_AXI_LITE_inst/reg_dac_length">
       <obj_property name="ElementShortName">reg_dac_length[31:0]</obj_property>

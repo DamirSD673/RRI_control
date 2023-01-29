@@ -98,6 +98,7 @@ architecture arch_imp of rri_control_v1_0 is
 		dac_enable : out std_logic;
 		adc_dma_start : out std_logic;
 		adc_dma_running : in std_logic;
+		adc_dma_channel : out std_logic_vector(1 downto 0);
 		
 		-- AXI Lite Signals
 		S_AXI_ACLK	: in std_logic;
@@ -141,6 +142,8 @@ architecture arch_imp of rri_control_v1_0 is
 		S_AXIS_TDATA	: in std_logic_vector(C_S_AXIS_TDATA_WIDTH-1 downto 0);
 		S_AXIS_TLAST	: in std_logic;
 		S_AXIS_TVALID	: in std_logic;
+
+		dma_channel : in std_logic_vector(1 downto 0);
 		dma_output_enable   : in std_logic;
 		dma_last_value      : in std_logic
 		);
@@ -183,7 +186,9 @@ architecture arch_imp of rri_control_v1_0 is
            adc_dma_last : out STD_LOGIC;
            adc_length : in STD_LOGIC_VECTOR (31 downto 0);
            dac_length : in STD_LOGIC_VECTOR (15 downto 0);
-           dac_addr : out STD_LOGIC_VECTOR (15 downto 0)
+           dac_addr : out STD_LOGIC_VECTOR (15 downto 0);
+		   adc_channel : in STD_LOGIC_VECTOR (1 downto 0);
+           adc_channel_active : out STD_LOGIC_VECTOR (1 downto 0)
         );
     end component rri_counter;
      
@@ -203,7 +208,9 @@ architecture arch_imp of rri_control_v1_0 is
     signal adc_start : std_logic;
     signal adc_dma_running : std_logic;
     signal adc_dma_enable : std_logic;
-
+	signal adc_dma_channel : std_logic_vector(1 downto 0);
+	signal adc_channel_active : std_logic_vector(1 downto 0);
+	
 begin
 
 -- Instantiation of Axi Bus Interface S_AXI_LITE
@@ -221,6 +228,7 @@ rri_control_v1_0_S_AXI_LITE_inst : rri_control_v1_0_S_AXI_LITE
 		dac_enable => dac_enable,
 		adc_dma_start => adc_start,
 		adc_dma_running => adc_dma_enable,
+		adc_dma_channel => adc_dma_channel,
 
 		S_AXI_ACLK	=> s_axi_lite_aclk,
 		S_AXI_ARESETN	=> s_axi_lite_aresetn,
@@ -239,8 +247,8 @@ rri_control_v1_0_S_AXI_LITE_inst : rri_control_v1_0_S_AXI_LITE
 		S_AXI_ARPROT	=> s_axi_lite_arprot,
 		S_AXI_ARVALID	=> s_axi_lite_arvalid,
 		S_AXI_ARREADY	=> s_axi_lite_arready,
-		S_AXI_RDATA	=> s_axi_lite_rdata,
-		S_AXI_RRESP	=> s_axi_lite_rresp,
+		S_AXI_RDATA		=> s_axi_lite_rdata,
+		S_AXI_RRESP		=> s_axi_lite_rresp,
 		S_AXI_RVALID	=> s_axi_lite_rvalid,
 		S_AXI_RREADY	=> s_axi_lite_rready
 	);
@@ -264,7 +272,8 @@ rri_control_v1_0_S_ADC2DMA_AXIS_inst : rri_control_v1_0_S_ADC2DMA_AXIS
 		S_AXIS_TLAST	=> s_adc_axis_tlast,
 		S_AXIS_TVALID	=> s_adc_axis_tvalid,
 		dma_output_enable => adc_dma_enable,
-		dma_last_value => adc_dma_last
+		dma_last_value => adc_dma_last,
+		dma_channel 	=> adc_channel_active
 	);
 
 -- Instantiation of Axi Bus Interface M_DAC_AXIS
@@ -293,7 +302,9 @@ rri_control_v1_0_M_DAC_AXIS_inst : rri_control_v1_0_M_DAC_AXIS
        adc_dma_last => adc_dma_last,
        adc_length => adc_length,
        dac_length => dac_length,
-       dac_addr => dac_ram_addr_rd
+       dac_addr => dac_ram_addr_rd,
+	   adc_channel => adc_dma_channel,
+       adc_channel_active => adc_channel_active
 	);
 
 		

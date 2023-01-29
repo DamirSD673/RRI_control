@@ -39,7 +39,10 @@ entity rri_counter is
            adc_dma_last : out STD_LOGIC;
            adc_length : in STD_LOGIC_VECTOR (31 downto 0);
            dac_length : in STD_LOGIC_VECTOR (15 downto 0);
-           dac_addr : out STD_LOGIC_VECTOR (15 downto 0));
+           dac_addr : out STD_LOGIC_VECTOR (15 downto 0);
+           adc_channel : in STD_LOGIC_VECTOR (1 downto 0);
+           adc_channel_active : out STD_LOGIC_VECTOR (1 downto 0)
+           );
 end rri_counter;
 
 architecture Behavioral of rri_counter is
@@ -47,12 +50,16 @@ architecture Behavioral of rri_counter is
     signal adc_counter	: unsigned(31 downto 0) := (others => '0');
     signal adc_counter_ena : std_logic := '0';
     signal adc_dma_last_int : std_logic := '0';
-
+    signal adc_last_channel : std_logic_vector(1 downto 0);
 begin
     
     process (clk)
     begin
         if rising_edge(clk) then
+            if adc_start /= '1' then
+                adc_last_channel <= adc_channel;
+            end if;
+
             if (dac_enable = '1') then
                 if dac_counter >= (unsigned(dac_length)) then
                     dac_counter <= (others => '0');
@@ -83,7 +90,7 @@ begin
     adc_dma_enable <= adc_counter_ena;
     adc_dma_last <= adc_dma_last_int;
     dac_addr <= std_logic_vector(dac_counter);
-    
+    adc_channel_active <= adc_last_channel;
 
 
 end Behavioral;

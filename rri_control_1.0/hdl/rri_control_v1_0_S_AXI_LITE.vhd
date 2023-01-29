@@ -22,6 +22,7 @@ entity rri_control_v1_0_S_AXI_LITE is
 		table_write_ena : out std_logic;
 		dac_length : out std_logic_vector(15 downto 0);
 		adc_length : out std_logic_vector(31 downto 0);
+		adc_dma_channel : out std_logic_vector(1 downto 0);
 		dac_enable : out std_logic;
 		adc_dma_start : out std_logic;
 		adc_dma_running : in std_logic;
@@ -132,7 +133,6 @@ architecture arch_imp of rri_control_v1_0_S_AXI_LITE is
 	
 	
 	signal dac_enable_int :std_logic := '0';
-	
 	signal dac_ram_write_ena : std_logic;
 	signal dac_ram_write_ena_delay : std_logic;
 	signal dac_ram_data : std_logic_vector(13 downto 0);
@@ -143,6 +143,7 @@ architecture arch_imp of rri_control_v1_0_S_AXI_LITE is
 	signal dac_length_out : std_logic_vector(15 downto 0);
 	signal adc_length_out : std_logic_vector(31 downto 0);
 	signal adc_start_int : std_logic := '0';
+	signal reg_adc_channel : std_logic_vector(31 downto 0);
 	signal slv_reg_rden	: std_logic;
 	signal slv_reg_wren	: std_logic;
 	signal reg_data_out	:std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
@@ -307,7 +308,7 @@ begin
 	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
 	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
 	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 3
+	                -- slave registor 4
 	                reg_dac_table_data(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
 	              end if;
 	              
@@ -318,11 +319,20 @@ begin
 	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
 	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
 	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 3
+	                -- slave registor 5
 	                reg_dac_table_addr(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
 	              end if;
 	            end loop;
 	            reg_dac_enable(0) <= '0';
+			when x"6" =>
+	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
+	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
+	                -- Respective byte enables are asserted as per write strobes                   
+	                -- slave registor 6
+	                reg_adc_channel(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
+	              end if;
+	            end loop;
+	            reg_adc_channel(31 downto 2) <= (others => '0');
 	          when others =>
 	             reg_dac_length <= reg_dac_length;
 	             reg_adc_length <= reg_adc_length;
@@ -420,7 +430,7 @@ begin
 	-- and the slave is ready to accept the read address.
 	slv_reg_rden <= axi_arready and S_AXI_ARVALID and (not axi_rvalid) ;
 
-	process (reg_dac_length, reg_adc_length, reg_adc_dma_status, reg_dac_enable, reg_dac_table_data, reg_dac_table_addr, axi_araddr, S_AXI_ARESETN, slv_reg_rden)
+	process (reg_dac_length, reg_adc_length, reg_adc_dma_status, reg_dac_enable, reg_dac_table_data, reg_dac_table_addr, reg_adc_channel, axi_araddr, S_AXI_ARESETN, slv_reg_rden)
 	variable loc_addr :std_logic_vector(C_S_AXI_ADDR_WIDTH-ADDR_LSB-1 downto 0);
 	begin
 	    -- Address decoding for reading registers
@@ -438,6 +448,8 @@ begin
 	        reg_data_out <= reg_dac_table_data;
 	      when x"5" =>
 	        reg_data_out <= reg_dac_table_addr;
+		  when x"6" =>
+			reg_data_out <= reg_adc_channel;
 	      when others =>
 	        reg_data_out  <= (others => '0');
 	    end case;
@@ -558,5 +570,17 @@ begin
 	    end if;
 	  end if;
 	end process;
+
+	-- Output ADC channel 
+	process( S_AXI_ACLK ) is
+		begin
+		  if (rising_edge (S_AXI_ACLK)) then
+			if ( S_AXI_ARESETN = '0' ) then
+			  	adc_dma_channel  <= b"00";
+			else
+				adc_dma_channel <= reg_adc_channel(1 downto 0);
+			end if;
+		  end if;
+		end process;
 
 end arch_imp;

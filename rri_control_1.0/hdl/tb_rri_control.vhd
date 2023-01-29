@@ -333,7 +333,16 @@ begin
         s_s_axi_lite_wstrb<=b"0000";
             
         s_s_axi_lite_awaddr<=x"1" & b"00"; -- write to register 0x01 (ADC Number of Samples)
-        s_s_axi_lite_wdata<=x"000005E8"; -- value 
+        s_s_axi_lite_wdata<=x"000005E8";    -- value 
+        s_s_axi_lite_wstrb<=b"1111";
+        sendIt<='1';                        --Start AXI Write to Slave
+        wait for 1 ns; sendIt<='0';     --Clear Start Send Flag
+    wait until s_s_axi_lite_bvalid = '1';
+    wait until s_s_axi_lite_bvalid = '0';  --AXI Write finished
+        s_s_axi_lite_wstrb<=b"0000";
+        
+        s_s_axi_lite_awaddr<=x"6" & b"00"; -- write to register 0x06 ADC-channel
+        s_s_axi_lite_wdata<=x"00000002"; -- value 
         s_s_axi_lite_wstrb<=b"1111";
         sendIt<='1';                --Start AXI Write to Slave
         wait for 1 ns; sendIt<='0'; --Clear Start Send Flag

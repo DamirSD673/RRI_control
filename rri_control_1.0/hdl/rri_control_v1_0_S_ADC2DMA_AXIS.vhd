@@ -59,7 +59,6 @@ architecture arch_imp of rri_control_v1_0_S_ADC2DMA_AXIS is
 	signal  mst_exec_state : state := IDLE;  
 	-- FIFO implementation signals
 	signal data_in_reg : std_logic_vector(C_M_AXIS_TDATA_WIDTH-1 downto 0);
-	signal choose_enable : std_logic := '1';
 	signal dma_channel_active: std_logic_vector(1 downto 0);
 	
 	signal data_counter : unsigned(1 downto 0);
@@ -111,11 +110,8 @@ begin
 	    else
 	    	dma_enable_delay <= dma_output_enable;
 	    	dma_data_last_delay <= dma_last_value;
-			if (choose_enable = '1') then
-	        	dma_channel_active <= dma_channel;
-	    	end if;
+	        dma_channel_active <= dma_channel;
 	       	if (dma_output_enable = '1') then
-	        	choose_enable <= '0';
 	        	-- Choice of the ADC channel 
 	       		case dma_channel_active is
 	            	when "01" => --Channel A
