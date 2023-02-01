@@ -51,6 +51,7 @@ architecture Behavioral of rri_counter is
     signal adc_counter_ena : std_logic := '0';
     signal adc_dma_last_int : std_logic := '0';
     signal adc_last_channel : std_logic_vector(1 downto 0);
+    signal reg_adc_length : std_logic_vector(31 downto 0);
 begin
     
     process (clk)
@@ -72,16 +73,18 @@ begin
                     
                 end if;
                 if adc_counter_ena = '1' then
-                   if adc_counter >= (unsigned(adc_length)) then
+                   if adc_counter >= (unsigned(reg_adc_length)) then
                        adc_counter <= (others => '0');
                        adc_counter_ena <= '0';
                        adc_dma_last_int <= '0';
                    else
-                       if adc_counter >= (unsigned(adc_length)-1) then
+                       if adc_counter >= (unsigned(reg_adc_length)-1) then
                            adc_dma_last_int <= '1';
                        end if;
                        adc_counter <= adc_counter + 1 ;
                    end if;
+                else
+                   reg_adc_length <= adc_length;
                 end if;
             end if;
         end if;

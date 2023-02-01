@@ -342,7 +342,7 @@ begin
         s_s_axi_lite_wstrb<=b"0000";
         
         s_s_axi_lite_awaddr<=x"6" & b"00"; -- write to register 0x06 ADC-channel
-        s_s_axi_lite_wdata<=x"00000002"; -- value 
+        s_s_axi_lite_wdata<=x"00000003"; -- value 
         s_s_axi_lite_wstrb<=b"1111";
         sendIt<='1';                --Start AXI Write to Slave
         wait for 1 ns; sendIt<='0'; --Clear Start Send Flag
@@ -395,7 +395,7 @@ begin
         
         wait for 5 us;
         s_s_axi_lite_awaddr<= x"3" & b"00"; -- write to register 0x03
-        s_s_axi_lite_wdata<=x"00000001"; -- value 1024 (0x400)
+        s_s_axi_lite_wdata<=x"00000001"; -- value start adc2dma
         s_s_axi_lite_wstrb<=b"1111";
         sendIt<='1';                --Start AXI Write to Slave
         wait for 1 ns; sendIt<='0'; --Clear Start Send Flag
@@ -407,12 +407,12 @@ begin
     wait for 10 us;
     timeIt <= '1';
     wait for 1 ns; timeIt <= '0';
-    s_s_axi_lite_awaddr<=x"1" & b"00"; -- write to register 0x04 (DAC Table Data)
-    s_s_axi_lite_wdata<=x"0000036D"; -- value 
-    s_s_axi_lite_wstrb<=b"1111";
-    sendIt<='1';                --Start AXI Write to Slave
-    wait for 1 ns; sendIt<='0'; --Clear Start Send Flag
-        
+    
+        s_s_axi_lite_awaddr<=x"1" & b"00"; -- rewrite to register 0x01 (ADC Number of Samples)
+        s_s_axi_lite_wdata<=x"00000370";    -- value 
+        s_s_axi_lite_wstrb<=b"1111";
+        sendIt<='1';                        --Start AXI Write to Slave
+        wait for 1 ns; sendIt<='0';     --Clear Start Send Flag
     wait until s_s_axi_lite_bvalid = '1';
     wait until s_s_axi_lite_bvalid = '0';  --AXI Write finished
         s_s_axi_lite_wstrb<=b"0000";

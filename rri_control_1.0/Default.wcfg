@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="11252443fs"></ZoomEndTime>
-      <Cursor1Time time="2568000fs"></Cursor1Time>
+      <ZoomEndTime time="21000001fs"></ZoomEndTime>
+      <Cursor1Time time="15608000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="272"></NameColumnWidth>
-      <ValueColumnWidth column_width="69"></ValueColumnWidth>
+      <NameColumnWidth column_width="267"></NameColumnWidth>
+      <ValueColumnWidth column_width="152"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="58" />
+   <WVObjectSize size="61" />
    <wvobject type="logic" fp_name="/tb_rri_control/s_clk_axi">
       <obj_property name="ElementShortName">s_clk_axi</obj_property>
       <obj_property name="ObjectShortName">s_clk_axi</obj_property>
@@ -116,11 +116,6 @@
       <obj_property name="ElementShortName">s_s_adc_axis_tready</obj_property>
       <obj_property name="ObjectShortName">s_s_adc_axis_tready</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/tb_rri_control/s_s_adc_axis_tdata">
-      <obj_property name="ElementShortName">s_s_adc_axis_tdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_s_adc_axis_tdata[31:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
    <wvobject type="logic" fp_name="/tb_rri_control/s_s_adc_axis_tlast">
       <obj_property name="ElementShortName">s_s_adc_axis_tlast</obj_property>
       <obj_property name="ObjectShortName">s_s_adc_axis_tlast</obj_property>
@@ -136,6 +131,13 @@
    <wvobject type="logic" fp_name="/tb_rri_control/s_m_dma_axis_tvalid">
       <obj_property name="ElementShortName">s_m_dma_axis_tvalid</obj_property>
       <obj_property name="ObjectShortName">s_m_dma_axis_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_rri_control/s_s_adc_axis_tdata">
+      <obj_property name="ElementShortName">s_s_adc_axis_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_s_adc_axis_tdata[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#800000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb_rri_control/s_m_dma_axis_tdata">
       <obj_property name="ElementShortName">s_m_dma_axis_tdata[63:0]</obj_property>
@@ -194,10 +196,16 @@
       <obj_property name="CellHeight">100</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/tb_rri_control/dut/rri_control_v1_0_S_ADC2DMA_AXIS_inst/dma_channel_active">
+      <obj_property name="ElementShortName">dma_channel_active[1:0]</obj_property>
+      <obj_property name="ObjectShortName">dma_channel_active[1:0]</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/tb_rri_control/dut/rri_counter_inst/adc_channel_active">
       <obj_property name="ElementShortName">adc_channel_active[1:0]</obj_property>
       <obj_property name="ObjectShortName">adc_channel_active[1:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#FF0000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb_rri_control/dut/rri_control_v1_0_S_AXI_LITE_inst/reg_dac_length">
       <obj_property name="ElementShortName">reg_dac_length[31:0]</obj_property>
@@ -234,6 +242,14 @@
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       <obj_property name="CellHeight">100</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_rri_control/dut/rri_counter_inst/adc_start">
+      <obj_property name="ElementShortName">adc_start</obj_property>
+      <obj_property name="ObjectShortName">adc_start</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_rri_control/dut/rri_control_v1_0_S_ADC2DMA_AXIS_inst/M_AXIS_TDATA">
+      <obj_property name="ElementShortName">M_AXIS_TDATA[63:0]</obj_property>
+      <obj_property name="ObjectShortName">M_AXIS_TDATA[63:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/tb_rri_control/dut/rri_counter_inst/adc_dma_last">
       <obj_property name="ElementShortName">adc_dma_last</obj_property>

@@ -146,6 +146,10 @@ begin
 	                           	data_in_reg(31 downto 0) <= S_AXIS_TDATA;
 	                       	when "01" =>
 	                           	data_in_reg(63 downto 32) <= S_AXIS_TDATA;
+							when "10" =>
+								data_in_reg(31 downto 0) <= S_AXIS_TDATA;
+							when "11" =>
+								data_in_reg(63 downto 32) <= S_AXIS_TDATA;
 	                       when others =>
 	                           	data_in_reg <= (others => 'X');
 	                   	end case;
@@ -159,7 +163,7 @@ begin
 	               	write_enable <= '1';
 	           	else
 					if dma_channel_active = b"11" then
-						if data_counter = b"10" then
+						if data_counter = b"01" then
 							write_enable <= '1';
 						else
 							write_enable <= '0';
@@ -169,9 +173,9 @@ begin
 	                   		write_enable <= '1';
 	            		else
 	                   		write_enable <= '0';
-	            	end if;
-	               data_counter <= data_counter + 1;
+	            		end if;
 				   end if;
+				   data_counter <= data_counter + 1;
 	           	end if;
 	        else
 	           	write_enable <= '0';
