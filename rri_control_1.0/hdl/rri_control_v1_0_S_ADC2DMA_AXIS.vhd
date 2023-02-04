@@ -165,17 +165,20 @@ begin
 					if dma_channel_active = b"11" then
 						if data_counter = b"01" then
 							write_enable <= '1';
+							data_counter <= b"00";
 						else
 							write_enable <= '0';
+							data_counter <= data_counter + 1;
 						end if;							
 					else
 	            		if data_counter = b"11" then
 	                   		write_enable <= '1';
+							data_counter <= b"00";
 	            		else
 	                   		write_enable <= '0';
+							data_counter <= data_counter + 1;
 	            		end if;
 				   end if;
-				   data_counter <= data_counter + 1;
 	           	end if;
 	        else
 	           	write_enable <= '0';

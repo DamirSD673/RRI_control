@@ -342,7 +342,7 @@ begin
         s_s_axi_lite_wstrb<=b"0000";
         
         s_s_axi_lite_awaddr<=x"6" & b"00"; -- write to register 0x06 ADC-channel
-        s_s_axi_lite_wdata<=x"00000003"; -- value 
+        s_s_axi_lite_wdata<=x"00000002"; -- value 
         s_s_axi_lite_wstrb<=b"1111";
         sendIt<='1';                --Start AXI Write to Slave
         wait for 1 ns; sendIt<='0'; --Clear Start Send Flag
