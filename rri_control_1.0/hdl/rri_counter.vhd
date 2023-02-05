@@ -41,7 +41,8 @@ entity rri_counter is
            dac_length : in STD_LOGIC_VECTOR (15 downto 0);
            dac_addr : out STD_LOGIC_VECTOR (15 downto 0);
            adc_channel : in STD_LOGIC_VECTOR (1 downto 0);
-           adc_channel_active : out STD_LOGIC_VECTOR (1 downto 0)
+           adc_channel_active : out STD_LOGIC_VECTOR (1 downto 0);
+           adc_data_valid : in STD_LOGIC
            );
 end rri_counter;
 
@@ -57,10 +58,6 @@ begin
     process (clk)
     begin
         if rising_edge(clk) then
-            if adc_start /= '1' then
-                adc_last_channel <= adc_channel;
-            end if;
-
             if (dac_enable = '1') then
                 if dac_counter >= (unsigned(dac_length)) then
                     dac_counter <= (others => '0');
@@ -69,22 +66,24 @@ begin
                         adc_counter <= (others => '0');
                     end if;
                 else
-                    dac_counter <=  dac_counter + 1 ;
-                    
+                    dac_counter <=  dac_counter + 1; 
                 end if;
                 if adc_counter_ena = '1' then
-                   if adc_counter >= (unsigned(reg_adc_length)) then
-                       adc_counter <= (others => '0');
-                       adc_counter_ena <= '0';
-                       adc_dma_last_int <= '0';
-                   else
-                       if adc_counter >= (unsigned(reg_adc_length)-1) then
-                           adc_dma_last_int <= '1';
-                       end if;
-                       adc_counter <= adc_counter + 1 ;
-                   end if;
+                    if adc_counter >= (unsigned(reg_adc_length)) then
+                        adc_counter <= (others => '0');
+                        adc_counter_ena <= '0';
+                        adc_dma_last_int <= '0';
+                    else
+                        if adc_data_valid = '1' then
+                            if adc_counter >= (unsigned(reg_adc_length)-1) then
+                                adc_dma_last_int <= '1';
+                            end if;
+                        adc_counter <= adc_counter + 1;
+                        end if;
+                    end if;
                 else
-                   reg_adc_length <= adc_length;
+                    adc_last_channel <= adc_channel;
+                    reg_adc_length <= adc_length;
                 end if;
             end if;
         end if;

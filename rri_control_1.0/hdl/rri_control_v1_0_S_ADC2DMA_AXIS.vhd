@@ -112,74 +112,75 @@ begin
 	    	dma_data_last_delay <= dma_last_value;
 	        dma_channel_active <= dma_channel;
 	       	if (dma_output_enable = '1') then
-	        	-- Choice of the ADC channel 
-	       		case dma_channel_active is
-	            	when "01" => --Channel A
-	                   	case data_counter is
-	                        when "00" =>
-	                            data_in_reg(15 downto 0) <= S_AXIS_TDATA(15 downto 0);
-	                        when "01" =>
-	                           	data_in_reg(31 downto 16) <= S_AXIS_TDATA(15 downto 0);
-	                        when "10" =>
-	                           	data_in_reg(47 downto 32) <= S_AXIS_TDATA(15 downto 0);
-	                        when "11" =>
-	                           	data_in_reg(63 downto 48) <= S_AXIS_TDATA(15 downto 0);
-	                        when others => -- 'U', 'X', '-', etc.
-                                data_in_reg <= (others => 'X');
-	                    end case;
-	               	when "10" => -- Channel B
-	                    case data_counter is
-	                        when "00" =>
-	                        	data_in_reg(15 downto 0) <= S_AXIS_TDATA(31 downto 16);
-	                        when "01" =>
-	                        	data_in_reg(31 downto 16) <= S_AXIS_TDATA(31 downto 16);
-	                        when "10" =>
-	                        	data_in_reg(47 downto 32) <= S_AXIS_TDATA(31 downto 16);
-	                        when "11" =>
-	                            data_in_reg(63 downto 48) <= S_AXIS_TDATA(31 downto 16);
-	                        when others => -- 'U', 'X', '-', etc.
-                                data_in_reg <= (others => 'X');
-	                     end case;
-	               	when "11" => -- Channel A and B
-	                   	case data_counter is 
-	                       	when "00" =>
-	                           	data_in_reg(31 downto 0) <= S_AXIS_TDATA;
-	                       	when "01" =>
-	                           	data_in_reg(63 downto 32) <= S_AXIS_TDATA;
-							when "10" =>
-								data_in_reg(31 downto 0) <= S_AXIS_TDATA;
-							when "11" =>
-								data_in_reg(63 downto 32) <= S_AXIS_TDATA;
-	                       when others =>
-	                           	data_in_reg <= (others => 'X');
-	                   	end case;
-	               	when others =>
-	                   	data_in_reg <= (others => 'X');
-	           	end case;
-	           
-	           	if dma_last_value = '1' then
-	               	data_counter <= b"00";
-	               	data_counter_last <= data_counter;
-	               	write_enable <= '1';
-	           	else
-					if dma_channel_active = b"11" then
-						if data_counter = b"01" then
-							write_enable <= '1';
-							data_counter <= b"00";
-						else
-							write_enable <= '0';
-							data_counter <= data_counter + 1;
-						end if;							
+				if (S_AXIS_TVALID = '1') then
+	        		-- Choice of the ADC channel 
+					case dma_channel_active is
+						when "01" => --Channel A
+							case data_counter is
+								when "00" =>
+									data_in_reg(15 downto 0) <= S_AXIS_TDATA(15 downto 0);
+								when "01" =>
+									data_in_reg(31 downto 16) <= S_AXIS_TDATA(15 downto 0);
+								when "10" =>
+									data_in_reg(47 downto 32) <= S_AXIS_TDATA(15 downto 0);
+								when "11" =>
+									data_in_reg(63 downto 48) <= S_AXIS_TDATA(15 downto 0);
+								when others => -- 'U', 'X', '-', etc.
+									data_in_reg <= (others => 'X');
+							end case;
+						when "10" => -- Channel B
+							case data_counter is
+								when "00" =>
+									data_in_reg(15 downto 0) <= S_AXIS_TDATA(31 downto 16);
+								when "01" =>
+									data_in_reg(31 downto 16) <= S_AXIS_TDATA(31 downto 16);
+								when "10" =>
+									data_in_reg(47 downto 32) <= S_AXIS_TDATA(31 downto 16);
+								when "11" =>
+									data_in_reg(63 downto 48) <= S_AXIS_TDATA(31 downto 16);
+								when others => -- 'U', 'X', '-', etc.
+									data_in_reg <= (others => 'X');
+							end case;
+						when "11" => -- Channel A and B
+							case data_counter is 
+								when "00" =>
+									data_in_reg(31 downto 0) <= S_AXIS_TDATA;
+								when "01" =>
+									data_in_reg(63 downto 32) <= S_AXIS_TDATA;
+								when "10" =>
+									data_in_reg(31 downto 0) <= S_AXIS_TDATA;
+								when "11" =>
+									data_in_reg(63 downto 32) <= S_AXIS_TDATA;
+							when others =>
+									data_in_reg <= (others => 'X');
+							end case;
+						when others =>
+							data_in_reg <= (others => 'X');
+					end case;
+				
+					if dma_last_value = '1' then
+						data_counter <= b"00";
+						data_counter_last <= data_counter;
+						write_enable <= '1';
 					else
-	            		if data_counter = b"11" then
-	                   		write_enable <= '1';
-							data_counter <= b"00";
-	            		else
-	                   		write_enable <= '0';
-							data_counter <= data_counter + 1;
-	            		end if;
-				   end if;
-	           	end if;
+						data_counter <= data_counter + 1;
+						if dma_channel_active = b"11" then
+							if data_counter = b"01" then
+								write_enable <= '1';
+								data_counter <= b"00";
+							else
+								write_enable <= '0';
+							end if;							
+						else
+							if data_counter = b"11" then
+								write_enable <= '1';
+								data_counter <= b"00";
+							else
+								write_enable <= '0';
+							end if;
+						end if;
+					end if;
+				end if;
 	        else
 	           	write_enable <= '0';
 	           	data_in_reg <= (others => '0');

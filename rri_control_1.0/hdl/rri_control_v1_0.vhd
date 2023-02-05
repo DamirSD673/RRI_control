@@ -188,7 +188,8 @@ architecture arch_imp of rri_control_v1_0 is
            dac_length : in STD_LOGIC_VECTOR (15 downto 0);
            dac_addr : out STD_LOGIC_VECTOR (15 downto 0);
 		   adc_channel : in STD_LOGIC_VECTOR (1 downto 0);
-           adc_channel_active : out STD_LOGIC_VECTOR (1 downto 0)
+           adc_channel_active : out STD_LOGIC_VECTOR (1 downto 0);
+		   adc_data_valid : in STD_LOGIC
         );
     end component rri_counter;
      
@@ -304,7 +305,8 @@ rri_control_v1_0_M_DAC_AXIS_inst : rri_control_v1_0_M_DAC_AXIS
        dac_length => dac_length,
        dac_addr => dac_ram_addr_rd,
 	   adc_channel => adc_dma_channel,
-       adc_channel_active => adc_channel_active
+       adc_channel_active => adc_channel_active,
+	   adc_data_valid => s_adc_axis_tvalid
 	);
 
 		
