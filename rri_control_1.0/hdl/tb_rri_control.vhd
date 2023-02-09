@@ -38,7 +38,8 @@ entity tb_rri_control is
     generic (  
             g_period_axi  : time := 20 ns;
             g_period_axis  : time := 8 ns;
-            g_timeout : time :=  1 ms
+            g_timeout : time :=  1 ms;
+            g_decimation : integer := 2
         );
 --  Port ( );
 end tb_rri_control;
@@ -184,6 +185,7 @@ begin
     
     s_rst_axi <= '1' after 20 ns;
     s_rst_axis <= '1' after 30 ns;
+    s_s_adc_axis_tvalid <= not s_s_adc_axis_tvalid after g_decimation * g_period_axis / 2;
     
     s_s_axi_lite_aclk <= s_clk_axi;
     
