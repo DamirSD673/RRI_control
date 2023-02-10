@@ -180,6 +180,8 @@ begin
 							end if;
 						end if;
 					end if;
+				else
+					write_enable <= '0';
 				end if;
 	        else
 	           	write_enable <= '0';
